@@ -2,47 +2,138 @@ package com.photohire.service.impl;
 
 import com.photohire.dto.request.BookingRequest;
 import com.photohire.dto.response.BookingResponse;
+import com.photohire.entity.Booking;
+import com.photohire.entity.User;
+import com.photohire.enums.BookingStatus;
+import com.photohire.exception.BookingNotFoundException;
+import com.photohire.exception.UserNotFoundException;
+import com.photohire.mapper.BookingMapper;
+import com.photohire.repository.BookingRepository;
+import com.photohire.repository.UserRepository;
 import com.photohire.service.BookingService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BookingServiceImpl
         implements BookingService {
 
+    private final BookingRepository bookingRepository;
+    private final UserRepository userRepository;
+
+    public BookingServiceImpl(
+            BookingRepository bookingRepository,
+            UserRepository userRepository) {
+
+        this.bookingRepository = bookingRepository;
+        this.userRepository = userRepository;
+    }
+
     @Override
     public BookingResponse createBooking(
             BookingRequest request) {
 
-        return null;
+        User client = userRepository.findById(
+                        request.getClientId())
+                .orElseThrow(() ->
+                        new UserNotFoundException(
+                                "Client not found with id "
+                                        + request.getClientId()));
+
+        User photographer = userRepository.findById(
+                        request.getPhotographerId())
+                .orElseThrow(() ->
+                        new UserNotFoundException(
+                                "Photographer not found with id "
+                                        + request.getPhotographerId()));
+
+        Booking booking =
+                BookingMapper.toEntity(request);
+
+        booking.setClient(client);
+        booking.setPhotographer(photographer);
+        booking.setStatus(BookingStatus.PENDING);
+
+        Booking savedBooking =
+                bookingRepository.save(booking);
+
+        return BookingMapper.toResponse(
+                savedBooking);
     }
 
     @Override
     public BookingResponse getBookingById(
             Long bookingId) {
 
-        return null;
+        Booking booking =
+                bookingRepository.findById(
+                                bookingId)
+                        .orElseThrow(() ->
+                                new BookingNotFoundException(
+                                        "Booking not found with id "
+                                                + bookingId));
+
+        return BookingMapper.toResponse(
+                booking);
     }
 
     @Override
     public List<BookingResponse>
     getClientBookings(Long clientId) {
 
-        return List.of();
+        User client = userRepository.findById(
+                        clientId)
+                .orElseThrow(() ->
+                        new UserNotFoundException(
+                                "Client not found"));
+
+        return bookingRepository.findByClient(client)
+                .stream()
+                .map(BookingMapper::toResponse)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<BookingResponse>
     getPhotographerBookings(Long photographerId) {
 
-        return List.of();
+        User photographer =
+                userRepository.findById(
+                                photographerId)
+                        .orElseThrow(() ->
+                                new UserNotFoundException(
+                                        "Photographer not found"));
+
+        return bookingRepository
+                .findByPhotographer(
+                        photographer)
+                .stream()
+                .map(BookingMapper::toResponse)
+                .collect(Collectors.toList());
     }
 
     @Override
     public BookingResponse cancelBooking(
             Long bookingId) {
 
-        return null;
+        Booking booking =
+                bookingRepository.findById(
+                                bookingId)
+                        .orElseThrow(() ->
+                                new BookingNotFoundException(
+                                        "Booking not found with id "
+                                                + bookingId));
+
+        booking.setStatus(
+                BookingStatus.CANCELLED);
+
+        Booking updatedBooking =
+                bookingRepository.save(
+                        booking);
+
+        return BookingMapper.toResponse(
+                updatedBooking);
     }
 }

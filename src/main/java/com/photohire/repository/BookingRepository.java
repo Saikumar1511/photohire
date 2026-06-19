@@ -15,5 +15,4 @@ public interface BookingRepository
     List<Booking> findByPhotographer(User photographer);
 
     List<Booking> findByStatus(BookingStatus status);
-
 }

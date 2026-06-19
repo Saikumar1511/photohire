@@ -22,6 +22,12 @@ public class BookingMapper {
 
         booking.setEndDate(
                 request.getEndDate());
+        
+        booking.setTotalDays(
+                request.getTotalDays());
+
+        booking.setExpectedBudget(
+                request.getExpectedBudget());
 
 
         return booking;
@@ -47,6 +53,12 @@ public class BookingMapper {
 
         response.setStatus(
                 booking.getStatus());
+
+        response.setTotalDays(
+                booking.getTotalDays());
+
+        response.setExpectedBudget(
+                booking.getExpectedBudget());
 
         if (booking.getClient() != null) {
 
