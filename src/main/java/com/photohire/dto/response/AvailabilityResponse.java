@@ -9,5 +9,7 @@ public class AvailabilityResponse {
 
     private Long id;
 
+    private Long photographerProfileId;
+
     private LocalDate availableDate;
 }

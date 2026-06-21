@@ -110,4 +110,24 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(response);
     }
+
+    @ExceptionHandler(
+        PhotographerUnavailableException.class)
+public ResponseEntity<ErrorResponse>
+handlePhotographerUnavailableException(
+        PhotographerUnavailableException ex) {
+
+    ErrorResponse response =
+            new ErrorResponse(
+                    LocalDateTime.now(),
+                    HttpStatus.BAD_REQUEST.value(),
+                    "Photographer Unavailable",
+                    ex.getMessage()
+            );
+
+    return new ResponseEntity<>(
+            response,
+            HttpStatus.BAD_REQUEST);
+    }
+
 }

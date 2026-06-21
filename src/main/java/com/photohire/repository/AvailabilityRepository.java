@@ -10,12 +10,14 @@ import java.util.List;
 public interface AvailabilityRepository
         extends JpaRepository<Availability, Long> {
 
-    List<Availability>
-    findByPhotographerProfile(PhotographerProfile profile);
+    List<Availability> findByPhotographerProfile(
+            PhotographerProfile photographerProfile);
 
     boolean existsByPhotographerProfileAndAvailableDate(
-            PhotographerProfile profile,
-            LocalDate availableDate
-    );
+            PhotographerProfile photographerProfile,
+            LocalDate availableDate);
 
+    void deleteByPhotographerProfileAndAvailableDate(
+            PhotographerProfile photographerProfile,
+            LocalDate availableDate);
 }
