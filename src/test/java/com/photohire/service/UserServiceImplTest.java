@@ -5,28 +5,22 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 import com.photohire.dto.request.BookingRequest;
-import com.photohire.dto.request.UserRegistrationRequest;
 import com.photohire.dto.response.BookingResponse;
-import com.photohire.dto.response.UserResponse;
 import com.photohire.entity.Booking;
 import com.photohire.entity.PhotographerProfile;
 import com.photohire.entity.User;
 import com.photohire.enums.BookingStatus;
-import com.photohire.enums.UserRole;
 import com.photohire.exception.BookingNotFoundException;
 import com.photohire.exception.PhotographerNotFoundException;
 import com.photohire.exception.PhotographerUnavailableException;
-import com.photohire.exception.ResourceAlreadyExistsException;
 import com.photohire.exception.UserNotFoundException;
 import com.photohire.repository.AvailabilityRepository;
 import com.photohire.repository.BookingRepository;
