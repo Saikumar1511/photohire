@@ -16,5 +16,4 @@ public interface BookingRepository
 
     List<Booking> findByStatus(BookingStatus status);
 
-
 }

@@ -7,20 +7,20 @@ import java.util.List;
 
 public interface PhotographerService {
 
-    PhotographerProfileResponse createProfile(
-            PhotographerProfileRequest request);
+        PhotographerProfileResponse createProfile(
+                        PhotographerProfileRequest request);
 
-    PhotographerProfileResponse getProfileById(
-            Long profileId);
+        PhotographerProfileResponse getProfileById(
+                        Long profileId);
 
-    PhotographerProfileResponse updateProfile(
-            Long profileId,
-            PhotographerProfileRequest request);
+        PhotographerProfileResponse updateProfile(
+                        Long profileId,
+                        PhotographerProfileRequest request);
 
-    List<PhotographerProfileResponse>
-    getAllPhotographers();
+        List<PhotographerProfileResponse> getAllPhotographers();
 
-    List<PhotographerProfileResponse>
-    getAvailablePhotographers();
+        List<PhotographerProfileResponse> getAvailablePhotographers();
 
+        void deleteProfile(
+                        Long profileId);
 }

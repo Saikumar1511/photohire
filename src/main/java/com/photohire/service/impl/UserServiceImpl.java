@@ -14,63 +14,123 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl
+                implements UserService {
 
-    private final UserRepository userRepository;
+        private final UserRepository userRepository;
 
-    public UserServiceImpl(
-            UserRepository userRepository) {
+        public UserServiceImpl(
+                        UserRepository userRepository) {
 
-        this.userRepository = userRepository;
-    }
-
-    @Override
-    public UserResponse registerUser(
-            UserRegistrationRequest request) {
-
-        if (userRepository.existsByEmail(
-                request.getEmail())) {
-
-            throw new ResourceAlreadyExistsException(
-                    "Email already exists");
+                this.userRepository = userRepository;
         }
 
-        if (userRepository.existsByPhoneNumber(
-                request.getPhoneNumber())) {
+        @Override
+        public UserResponse registerUser(
+                        UserRegistrationRequest request) {
 
-            throw new ResourceAlreadyExistsException(
-                    "Phone number already exists");
+                if (userRepository.existsByEmail(
+                                request.getEmail())) {
+
+                        throw new ResourceAlreadyExistsException(
+                                        "Email already exists");
+                }
+
+                if (userRepository.existsByPhoneNumber(
+                                request.getPhoneNumber())) {
+
+                        throw new ResourceAlreadyExistsException(
+                                        "Phone number already exists");
+                }
+
+                User user = UserMapper.toEntity(request);
+
+                User savedUser = userRepository.save(user);
+
+                return UserMapper.toResponse(
+                                savedUser);
         }
 
-        User user =
-                UserMapper.toEntity(request);
+        @Override
+        public UserResponse getUserById(
+                        Long userId) {
 
-        User savedUser =
-                userRepository.save(user);
+                User user = userRepository.findById(userId)
+                                .orElseThrow(() -> new UserNotFoundException(
+                                                "User not found with id "
+                                                                + userId));
 
-        return UserMapper.toResponse(savedUser);
-    }
+                return UserMapper.toResponse(
+                                user);
+        }
 
-    @Override
-    public UserResponse getUserById(
-            Long userId) {
+        @Override
+        public List<UserResponse> getAllUsers() {
+                return userRepository.findAll()
+                                .stream()
+                                .map(UserMapper::toResponse)
+                                .collect(Collectors.toList());
+        }
 
-        User user =
-                userRepository.findById(userId)
-                        .orElseThrow(() ->
-                                new UserNotFoundException(
-                                        "User not found with id "
-                                                + userId));
+        @Override
+        public UserResponse updateUser(
+                        Long userId,
+                        UserRegistrationRequest request) {
 
-        return UserMapper.toResponse(user);
-    }
+                User user = userRepository.findById(userId)
+                                .orElseThrow(() -> new UserNotFoundException(
+                                                "User not found with id "
+                                                                + userId));
 
-    @Override
-    public List<UserResponse> getAllUsers() {
+                // Check if email is already used by another user
+                if (!user.getEmail().equals(request.getEmail())
+                                && userRepository.existsByEmail(
+                                                request.getEmail())) {
+                        throw new ResourceAlreadyExistsException(
+                                        "Email already exists");
+                }
 
-        return userRepository.findAll()
-                .stream()
-                .map(UserMapper::toResponse)
-                .collect(Collectors.toList());
-    }
+                // Check if phone number is already used by another user
+                if (!user.getPhoneNumber().equals(
+                                request.getPhoneNumber())
+                                && userRepository.existsByPhoneNumber(
+                                                request.getPhoneNumber())) {
+                        throw new ResourceAlreadyExistsException(
+                                        "Phone number already exists");
+                }
+
+                user.setFirstName(
+                                request.getFirstName());
+
+                user.setLastName(
+                                request.getLastName());
+
+                user.setEmail(
+                                request.getEmail());
+
+                user.setPhoneNumber(
+                                request.getPhoneNumber());
+
+                user.setPassword(
+                                request.getPassword());
+
+                user.setRole(
+                                request.getRole());
+
+                User updatedUser = userRepository.save(user);
+
+                return UserMapper.toResponse(
+                                updatedUser);
+        }
+
+        @Override
+        public void deleteUser(
+                        Long userId) {
+                User user = userRepository.findById(userId)
+                                .orElseThrow(() -> new UserNotFoundException(
+                                                "User not found with id "
+                                                                + userId));
+                userRepository.delete(user);
+        }
+
 }

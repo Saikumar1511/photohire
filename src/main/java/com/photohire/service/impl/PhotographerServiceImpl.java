@@ -5,6 +5,7 @@ import com.photohire.dto.response.PhotographerProfileResponse;
 import com.photohire.entity.PhotographerProfile;
 import com.photohire.entity.User;
 import com.photohire.exception.PhotographerNotFoundException;
+import com.photohire.exception.ResourceAlreadyExistsException;
 import com.photohire.exception.UserNotFoundException;
 import com.photohire.mapper.PhotographerMapper;
 import com.photohire.repository.PhotographerProfileRepository;
@@ -17,108 +18,134 @@ import java.util.stream.Collectors;
 
 @Service
 public class PhotographerServiceImpl
-        implements PhotographerService {
+                implements PhotographerService {
 
-    private final PhotographerProfileRepository photographerProfileRepository;
-    private final UserRepository userRepository;
+        private final PhotographerProfileRepository photographerProfileRepository;
 
-    public PhotographerServiceImpl(
-            PhotographerProfileRepository photographerProfileRepository,
-            UserRepository userRepository) {
+        private final UserRepository userRepository;
 
-        this.photographerProfileRepository =
-                photographerProfileRepository;
+        public PhotographerServiceImpl(
+                        PhotographerProfileRepository photographerProfileRepository,
+                        UserRepository userRepository) {
 
-        this.userRepository =
-                userRepository;
-    }
+                this.photographerProfileRepository = photographerProfileRepository;
 
-    @Override
-    public PhotographerProfileResponse createProfile(
-            PhotographerProfileRequest request) {
+                this.userRepository = userRepository;
+        }
 
-        User user = userRepository.findById(
-                        request.getUserId())
-                .orElseThrow(() ->
-                        new UserNotFoundException(
-                                "User not found with id "
-                                        + request.getUserId()));
+        @Override
+        public PhotographerProfileResponse createProfile(
+                        PhotographerProfileRequest request) {
 
-        PhotographerProfile profile =
-                PhotographerMapper.toEntity(request);
+                User user = userRepository.findById(
+                                request.getUserId())
+                                .orElseThrow(() -> new UserNotFoundException(
+                                                "User not found with id "
+                                                                + request.getUserId()));
 
-        profile.setUser(user);
+                if (photographerProfileRepository
+                                .findByUser(user)
+                                .isPresent()) {
+                        throw new ResourceAlreadyExistsException(
+                                        "Photographer profile already exists");
+                }
+                PhotographerProfile profile = PhotographerMapper.toEntity(request);
 
-        PhotographerProfile savedProfile =
-                photographerProfileRepository.save(profile);
+                profile.setUser(user);
 
-        return PhotographerMapper.toResponse(
-                savedProfile);
-    }
+                PhotographerProfile savedProfile = photographerProfileRepository.save(
+                                profile);
 
-    @Override
-    public PhotographerProfileResponse getProfileById(
-            Long profileId) {
+                return PhotographerMapper.toResponse(
+                                savedProfile);
+        }
 
-        PhotographerProfile profile =
-                photographerProfileRepository.findById(
+        @Override
+        public PhotographerProfileResponse getProfileById(
+                        Long profileId) {
+
+                PhotographerProfile profile = photographerProfileRepository.findById(
                                 profileId)
-                        .orElseThrow(() ->
-                                new PhotographerNotFoundException(
-                                        "Photographer profile not found with id "
-                                                + profileId));
+                                .orElseThrow(() -> new PhotographerNotFoundException(
+                                                "Photographer profile not found with id "
+                                                                + profileId));
 
-        return PhotographerMapper.toResponse(
-                profile);
-    }
+                return PhotographerMapper.toResponse(
+                                profile);
+        }
 
-    @Override
-    public PhotographerProfileResponse updateProfile(
-            Long profileId,
-            PhotographerProfileRequest request) {
+        @Override
+        public PhotographerProfileResponse updateProfile(
+                        Long profileId,
+                        PhotographerProfileRequest request) {
 
-        PhotographerProfile profile =
-                photographerProfileRepository.findById(
+                PhotographerProfile profile = photographerProfileRepository.findById(
                                 profileId)
-                        .orElseThrow(() ->
-                                new PhotographerNotFoundException(
-                                        "Photographer profile not found with id "
-                                                + profileId));
+                                .orElseThrow(() -> new PhotographerNotFoundException(
+                                                "Photographer profile not found with id "
+                                                                + profileId));
 
-        profile.setCity(request.getCity());
-        profile.setBio(request.getBio());
-        profile.setDailyRate(request.getDailyRate());
-        profile.setYearsOfExperience(
-                request.getYearsOfExperience());
-        profile.setAvailable(
-                request.getAvailable());
+                User user = userRepository.findById(
+                                request.getUserId())
+                                .orElseThrow(() -> new UserNotFoundException(
+                                                "User not found with id "
+                                                                + request.getUserId()));
 
-        PhotographerProfile updatedProfile =
-                photographerProfileRepository.save(
-                        profile);
+                profile.setCity(
+                                request.getCity());
 
-        return PhotographerMapper.toResponse(
-                updatedProfile);
-    }
+                profile.setBio(
+                                request.getBio());
 
-    @Override
-    public List<PhotographerProfileResponse>
-    getAllPhotographers() {
+                profile.setDailyRate(
+                                request.getDailyRate());
 
-        return photographerProfileRepository.findAll()
-                .stream()
-                .map(PhotographerMapper::toResponse)
-                .collect(Collectors.toList());
-    }
+                profile.setYearsOfExperience(
+                                request.getYearsOfExperience());
 
-    @Override
-    public List<PhotographerProfileResponse>
-    getAvailablePhotographers() {
+                profile.setAvailable(
+                                request.getAvailable());
 
-        return photographerProfileRepository
-                .findByAvailableTrue()
-                .stream()
-                .map(PhotographerMapper::toResponse)
-                .collect(Collectors.toList());
-    }
+                profile.setUser(user);
+
+                PhotographerProfile updatedProfile = photographerProfileRepository.save(
+                                profile);
+
+                return PhotographerMapper.toResponse(
+                                updatedProfile);
+        }
+
+        @Override
+        public List<PhotographerProfileResponse> getAllPhotographers() {
+
+                return photographerProfileRepository
+                                .findAll()
+                                .stream()
+                                .map(PhotographerMapper::toResponse)
+                                .collect(Collectors.toList());
+        }
+
+        @Override
+        public List<PhotographerProfileResponse> getAvailablePhotographers() {
+
+                return photographerProfileRepository
+                                .findByAvailableTrue()
+                                .stream()
+                                .map(PhotographerMapper::toResponse)
+                                .collect(Collectors.toList());
+        }
+
+        @Override
+        public void deleteProfile(
+                        Long profileId) {
+
+                PhotographerProfile profile = photographerProfileRepository.findById(
+                                profileId)
+                                .orElseThrow(() -> new PhotographerNotFoundException(
+                                                "Photographer profile not found with id "
+                                                                + profileId));
+
+                photographerProfileRepository.delete(
+                                profile);
+        }
 }

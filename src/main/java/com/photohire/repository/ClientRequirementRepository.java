@@ -9,7 +9,6 @@ import java.util.Optional;
 public interface ClientRequirementRepository
         extends JpaRepository<ClientRequirement, Long> {
 
-    Optional<ClientRequirement>
-    findByBooking(Booking booking);
+    Optional<ClientRequirement> findByBooking(Booking booking);
 
 }

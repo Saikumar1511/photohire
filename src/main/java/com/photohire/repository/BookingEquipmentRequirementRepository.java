@@ -9,7 +9,6 @@ import java.util.List;
 public interface BookingEquipmentRequirementRepository
         extends JpaRepository<BookingEquipmentRequirement, Long> {
 
-    List<BookingEquipmentRequirement>
-    findByBooking(Booking booking);
+    List<BookingEquipmentRequirement> findByBooking(Booking booking);
 
 }

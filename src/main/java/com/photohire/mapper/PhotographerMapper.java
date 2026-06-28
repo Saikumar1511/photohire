@@ -6,41 +6,39 @@ import com.photohire.entity.PhotographerProfile;
 
 public class PhotographerMapper {
 
-    private PhotographerMapper() {
-    }
+        private PhotographerMapper() {
+        }
 
-    public static PhotographerProfile toEntity(
-            PhotographerProfileRequest request) {
+        public static PhotographerProfile toEntity(
+                        PhotographerProfileRequest request) {
 
-        PhotographerProfile profile =
-                new PhotographerProfile();
+                PhotographerProfile profile = new PhotographerProfile();
 
-        profile.setCity(request.getCity());
-        profile.setBio(request.getBio());
-        profile.setDailyRate(request.getDailyRate());
-        profile.setYearsOfExperience(
-                request.getYearsOfExperience());
-        profile.setAvailable(
-                request.getAvailable());
+                profile.setCity(request.getCity());
+                profile.setBio(request.getBio());
+                profile.setDailyRate(request.getDailyRate());
+                profile.setYearsOfExperience(
+                                request.getYearsOfExperience());
+                profile.setAvailable(
+                                request.getAvailable());
 
-        return profile;
-    }
+                return profile;
+        }
 
-    public static PhotographerProfileResponse toResponse(
-            PhotographerProfile profile) {
+        public static PhotographerProfileResponse toResponse(
+                        PhotographerProfile profile) {
 
-        PhotographerProfileResponse response =
-                new PhotographerProfileResponse();
+                PhotographerProfileResponse response = new PhotographerProfileResponse();
 
-        response.setId(profile.getId());
-        response.setCity(profile.getCity());
-        response.setBio(profile.getBio());
-        response.setDailyRate(profile.getDailyRate());
-        response.setYearsOfExperience(
-                profile.getYearsOfExperience());
-        response.setAvailable(
-                profile.getAvailable());
+                response.setId(profile.getId());
+                response.setCity(profile.getCity());
+                response.setBio(profile.getBio());
+                response.setDailyRate(profile.getDailyRate());
+                response.setYearsOfExperience(
+                                profile.getYearsOfExperience());
+                response.setAvailable(
+                                profile.getAvailable());
 
-        return response;
-    }
+                return response;
+        }
 }

@@ -7,13 +7,16 @@ import java.util.List;
 
 public interface AvailabilityService {
 
-    AvailabilityResponse addAvailability(
-            AvailabilityRequest request);
+        AvailabilityResponse addAvailability(
+                        AvailabilityRequest request);
 
-    List<AvailabilityResponse>
-    getPhotographerAvailability(
-            Long photographerProfileId);
+        List<AvailabilityResponse> getPhotographerAvailability(
+                        Long photographerProfileId);
 
-    void deleteAvailability(
-            Long availabilityId);
+        AvailabilityResponse updateAvailability(
+                        Long availabilityId,
+                        AvailabilityRequest request);
+
+        void deleteAvailability(
+                        Long availabilityId);
 }

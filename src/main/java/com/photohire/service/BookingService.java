@@ -7,21 +7,22 @@ import java.util.List;
 
 public interface BookingService {
 
-    BookingResponse createBooking(
-            BookingRequest request);
+        BookingResponse createBooking(
+                        BookingRequest request);
 
-    BookingResponse getBookingById(
-            Long bookingId);
+        BookingResponse getBookingById(
+                        Long bookingId);
 
-    List<BookingResponse>
-    getClientBookings(Long clientId);
+        List<BookingResponse> getClientBookings(
+                        Long clientId);
 
-    List<BookingResponse>
-    getPhotographerBookings(Long photographerId);
+        List<BookingResponse> getPhotographerBookings(
+                        Long photographerId);
 
-    BookingResponse cancelBooking(
-            Long bookingId);
+        BookingResponse updateBooking(
+                        Long bookingId,
+                        BookingRequest request);
 
-            
-
+        BookingResponse cancelBooking(
+                        Long bookingId);
 }

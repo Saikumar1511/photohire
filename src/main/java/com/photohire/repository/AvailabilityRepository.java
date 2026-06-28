@@ -8,16 +8,16 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface AvailabilityRepository
-        extends JpaRepository<Availability, Long> {
+                extends JpaRepository<Availability, Long> {
 
-    List<Availability> findByPhotographerProfile(
-            PhotographerProfile photographerProfile);
+        List<Availability> findByPhotographerProfile(
+                        PhotographerProfile photographerProfile);
 
-    boolean existsByPhotographerProfileAndAvailableDate(
-            PhotographerProfile photographerProfile,
-            LocalDate availableDate);
+        boolean existsByPhotographerProfileAndAvailableDate(
+                        PhotographerProfile photographerProfile,
+                        LocalDate availableDate);
 
-    void deleteByPhotographerProfileAndAvailableDate(
-            PhotographerProfile photographerProfile,
-            LocalDate availableDate);
+        void deleteByPhotographerProfileAndAvailableDate(
+                        PhotographerProfile photographerProfile,
+                        LocalDate availableDate);
 }

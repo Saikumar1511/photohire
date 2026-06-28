@@ -5,26 +5,25 @@ import com.photohire.entity.Availability;
 
 public class AvailabilityMapper {
 
-    private AvailabilityMapper() {
-    }
+        private AvailabilityMapper() {
+        }
 
-    public static AvailabilityResponse toResponse(
-            Availability availability) {
+        public static AvailabilityResponse toResponse(
+                        Availability availability) {
 
-        AvailabilityResponse response =
-                new AvailabilityResponse();
+                AvailabilityResponse response = new AvailabilityResponse();
 
-        response.setId(
-                availability.getId());
+                response.setId(
+                                availability.getId());
 
-        response.setAvailableDate(
-                availability.getAvailableDate());
+                response.setAvailableDate(
+                                availability.getAvailableDate());
 
-        response.setPhotographerProfileId(
-                availability
-                        .getPhotographerProfile()
-                        .getId());
+                if (availability.getPhotographerProfile() != null) {
+                        response.setPhotographerProfileId(
+                                        availability.getPhotographerProfile().getId());
+                }
 
-        return response;
-    }
+                return response;
+        }
 }

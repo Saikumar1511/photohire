@@ -11,123 +11,122 @@ import java.time.LocalDateTime;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleUserNotFoundException(
-            UserNotFoundException ex) {
+        @ExceptionHandler(UserNotFoundException.class)
+        public ResponseEntity<ErrorResponse> handleUserNotFoundException(
+                        UserNotFoundException ex) {
 
-        ErrorResponse response = new ErrorResponse(
-                LocalDateTime.now(),
-                HttpStatus.NOT_FOUND.value(),
-                "User Not Found",
-                ex.getMessage()
-        );
+                ErrorResponse response = new ErrorResponse(
+                                LocalDateTime.now(),
+                                HttpStatus.NOT_FOUND.value(),
+                                "User Not Found",
+                                ex.getMessage());
 
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(response);
-    }
+                return ResponseEntity
+                                .status(HttpStatus.NOT_FOUND)
+                                .body(response);
+        }
 
-    @ExceptionHandler(PhotographerNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handlePhotographerNotFoundException(
-            PhotographerNotFoundException ex) {
+        @ExceptionHandler(PhotographerNotFoundException.class)
+        public ResponseEntity<ErrorResponse> handlePhotographerNotFoundException(
+                        PhotographerNotFoundException ex) {
 
-        ErrorResponse response = new ErrorResponse(
-                LocalDateTime.now(),
-                HttpStatus.NOT_FOUND.value(),
-                "Photographer Not Found",
-                ex.getMessage()
-        );
+                ErrorResponse response = new ErrorResponse(
+                                LocalDateTime.now(),
+                                HttpStatus.NOT_FOUND.value(),
+                                "Photographer Not Found",
+                                ex.getMessage());
 
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(response);
-    }
+                return ResponseEntity
+                                .status(HttpStatus.NOT_FOUND)
+                                .body(response);
+        }
 
-    @ExceptionHandler(BookingNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleBookingNotFoundException(
-            BookingNotFoundException ex) {
+        @ExceptionHandler(BookingNotFoundException.class)
+        public ResponseEntity<ErrorResponse> handleBookingNotFoundException(
+                        BookingNotFoundException ex) {
 
-        ErrorResponse response = new ErrorResponse(
-                LocalDateTime.now(),
-                HttpStatus.NOT_FOUND.value(),
-                "Booking Not Found",
-                ex.getMessage()
-        );
+                ErrorResponse response = new ErrorResponse(
+                                LocalDateTime.now(),
+                                HttpStatus.NOT_FOUND.value(),
+                                "Booking Not Found",
+                                ex.getMessage());
 
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(response);
-    }
+                return ResponseEntity
+                                .status(HttpStatus.NOT_FOUND)
+                                .body(response);
+        }
 
-    @ExceptionHandler(ResourceAlreadyExistsException.class)
-    public ResponseEntity<ErrorResponse> handleResourceAlreadyExistsException(
-            ResourceAlreadyExistsException ex) {
+        @ExceptionHandler(ResourceAlreadyExistsException.class)
+        public ResponseEntity<ErrorResponse> handleResourceAlreadyExistsException(
+                        ResourceAlreadyExistsException ex) {
 
-        ErrorResponse response = new ErrorResponse(
-                LocalDateTime.now(),
-                HttpStatus.CONFLICT.value(),
-                "Resource Already Exists",
-                ex.getMessage()
-        );
+                ErrorResponse response = new ErrorResponse(
+                                LocalDateTime.now(),
+                                HttpStatus.CONFLICT.value(),
+                                "Resource Already Exists",
+                                ex.getMessage());
 
-        return ResponseEntity
-                .status(HttpStatus.CONFLICT)
-                .body(response);
-    }
+                return ResponseEntity
+                                .status(HttpStatus.CONFLICT)
+                                .body(response);
+        }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleValidationException(
-            MethodArgumentNotValidException ex) {
+        @ExceptionHandler(MethodArgumentNotValidException.class)
+        public ResponseEntity<ErrorResponse> handleValidationException(
+                        MethodArgumentNotValidException ex) {
 
-        String message = ex.getBindingResult()
-                .getFieldError()
-                .getDefaultMessage();
+                String message = ex.getBindingResult()
+                                .getFieldError()
+                                .getDefaultMessage();
 
-        ErrorResponse response = new ErrorResponse(
-                LocalDateTime.now(),
-                HttpStatus.BAD_REQUEST.value(),
-                "Validation Failed",
-                message
-        );
+                ErrorResponse response = new ErrorResponse(
+                                LocalDateTime.now(),
+                                HttpStatus.BAD_REQUEST.value(),
+                                "Validation Failed",
+                                message);
 
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(response);
-    }
+                return ResponseEntity
+                                .status(HttpStatus.BAD_REQUEST)
+                                .body(response);
+        }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleException(
-            Exception ex) {
+        @ExceptionHandler(Exception.class)
+        public ResponseEntity<ErrorResponse> handleException(
+                        Exception ex) {
 
-        ErrorResponse response = new ErrorResponse(
-                LocalDateTime.now(),
-                HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                "Internal Server Error",
-                ex.getMessage()
-        );
+                ErrorResponse response = new ErrorResponse(
+                                LocalDateTime.now(),
+                                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                                "Internal Server Error",
+                                ex.getMessage());
 
-        return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(response);
-    }
+                return ResponseEntity
+                                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                .body(response);
+        }
 
-    @ExceptionHandler(
-        PhotographerUnavailableException.class)
-public ResponseEntity<ErrorResponse>
-handlePhotographerUnavailableException(
-        PhotographerUnavailableException ex) {
+        @ExceptionHandler(PhotographerUnavailableException.class)
+        public ResponseEntity<ErrorResponse> handlePhotographerUnavailableException(
+                        PhotographerUnavailableException ex) {
 
-    ErrorResponse response =
-            new ErrorResponse(
-                    LocalDateTime.now(),
-                    HttpStatus.BAD_REQUEST.value(),
-                    "Photographer Unavailable",
-                    ex.getMessage()
-            );
+                ErrorResponse response = new ErrorResponse(
+                                LocalDateTime.now(),
+                                HttpStatus.BAD_REQUEST.value(),
+                                "Photographer Unavailable",
+                                ex.getMessage());
 
-    return new ResponseEntity<>(
-            response,
-            HttpStatus.BAD_REQUEST);
-    }
+                return new ResponseEntity<>(
+                                response,
+                                HttpStatus.BAD_REQUEST);
+        }
+
+        public class AvailabilityNotFoundException
+                        extends RuntimeException {
+
+                public AvailabilityNotFoundException(
+                                String message) {
+                        super(message);
+                }
+        }
 
 }

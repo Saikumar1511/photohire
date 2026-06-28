@@ -10,10 +10,8 @@ import java.util.List;
 public interface PhotographerEquipmentRepository
         extends JpaRepository<PhotographerEquipment, Long> {
 
-    List<PhotographerEquipment>
-    findByPhotographerProfile(PhotographerProfile profile);
+    List<PhotographerEquipment> findByPhotographerProfile(PhotographerProfile profile);
 
-    List<PhotographerEquipment>
-    findByEquipmentType(EquipmentType equipmentType);
+    List<PhotographerEquipment> findByEquipmentType(EquipmentType equipmentType);
 
 }
